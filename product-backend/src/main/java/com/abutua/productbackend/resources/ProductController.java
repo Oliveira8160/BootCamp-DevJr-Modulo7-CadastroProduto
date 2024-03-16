@@ -1,6 +1,7 @@
 package com.abutua.productbackend.resources;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -17,45 +18,12 @@ import jakarta.annotation.PostConstruct;
 @RestController
 public class ProductController {
 
-    private List<Product> products = new ArrayList<>();
+    private List<Product> products = Arrays.asList( new Product(1, "Product01", 100.50),
+                                                    new Product(2, "Product2", 200.50),
+                                                    new Product(3, "Product03", 300.50));
 
-    @PostConstruct
-    public void init() {
-        Product p1 = new Product();
-
-        p1.setId(1);
-        p1.setName("Product01");
-        p1.setPrice(100.50);
-
-        Product p2 = new Product();
-
-        p2.setId(2);
-        p2.setName("Product2");
-        p2.setPrice(200.50);
-
-        Product p3 = new Product();
-
-        p3.setId(3);
-        p3.setName("Product03");
-        p3.setPrice(300.50);
-
-        products.add(p1);
-        products.add(p2);
-        products.add(p3);
-    }
-
-    @GetMapping("product/{id}")
+    @GetMapping("products/{id}")
     public ResponseEntity<Product> getProduct(@PathVariable int id) {
-
-        // if (id <= products.size()) {
-
-        // return ResponseEntity.ok(products.get(id - 1));
-
-        // }
-        // else{
-
-        // throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Product Not Found");
-        // }
 
         Product prod = products.stream().filter(p -> p.getId() == id).findFirst()
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product Not Found"));
